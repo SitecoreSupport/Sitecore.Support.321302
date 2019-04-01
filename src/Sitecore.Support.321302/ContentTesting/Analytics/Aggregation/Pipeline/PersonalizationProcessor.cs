@@ -144,7 +144,12 @@ namespace Sitecore.Support.ContentTesting.Analytics.Aggregation.Pipeline
         foreach (var renderingReference in array1)
         {
           var persRendering = renderingReference;
-          var testVariable = testSet.Variables.First(x => x.Id.Equals(Guid.Parse(persRendering.UniqueId)));
+          var testVariable = testSet.Variables.FirstOrDefault(x => x.Id.Equals(Guid.Parse(persRendering.UniqueId)));
+          if (testVariable == null)
+          {
+            Log.Warn($"Sitecore.Support.321302 rendering id {persRendering.UniqueId} is not found.", this);
+            continue;
+          }
           var testValue = testCombination.GetValue(Guid.Parse(persRendering.UniqueId));
           if (testValue != null)
           {
